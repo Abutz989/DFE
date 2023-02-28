@@ -11,7 +11,7 @@ class DroneEnv(gym.Env):
     }
     def __init__(self, runtime=10., dt=0.001):
         super(DroneEnv, self).__init__()
-        self.damping_time = 0.1
+        self.damping_time = 4
         self.runtime = runtime + self.damping_time                                    # time limit of the episode
         self.dt = dt
         max_act =np.ones(4,)

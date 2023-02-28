@@ -229,7 +229,17 @@ class TimeSeriesTransformer(nn.Module):
         # take only the last output of each seq
         x = x[:,-1,:]
         x = self.outputLayer(x)
+        return x
 
+    def featersExtract(self, x):
+        x = x.transpose(1, 2)
+        x = self.inputLayer(x)
+        x = self.pos_encoder(x)
+        for layer in self.encoder_layers:
+            x = layer(x)
+        # take only the last output of each seq
+        x = x[:,-1,:]
+        # add norm layer
         return x
 
 class LSTM(nn.Module):
@@ -256,3 +266,11 @@ class LSTM(nn.Module):
         x = self.outputLayer(x)
         return x
 
+
+    def featersExtract(self, x):
+        x = self.inputLayer(x)
+        x = x.unsqueeze(0)
+        x,_ = self.lstm(x)
+        x = x[-1,:, :]
+        # add norm layer
+        return x
